@@ -1,0 +1,27 @@
+--- Terraform Files to Ignore ---
+
+The primary state file
+
+*.tfstate
+*.tfstate.backup
+
+Local crash logs
+
+crash.log
+
+Terraform local config/modules
+
+.terraform/
+.terraform.lock.hcl
+
+Terraform CLI history file
+
+.terraform_history
+
+Credentials/Secrets (IMPORTANT)
+
+*.pem
+.key
+id_rsa
+credentials
+secrets.tfvars
