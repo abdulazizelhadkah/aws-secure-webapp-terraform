@@ -178,10 +178,54 @@ Before you begin, ensure you have the following tools installed and configured:
 After the apply is complete, Terraform will output any configured values, such as the public URL of the load balancer.
 
 ### 🧹 Clean Up
-
 To avoid ongoing charges, you can destroy all the resources created by this project when you are finished.
 
 ```sh
 terraform destroy
 ```
 Type yes when prompted to approve the deletion.
+
+---
+
+## 📸 Deployment Verification & Live Demo
+
+This section provides visual confirmation that the infrastructure has been successfully deployed and the application is running as intended.
+
+### 1. AWS Management Console Screenshots
+
+Below are screenshots from the AWS Management Console after a successful `terraform apply`.
+
+#### VPC and Subnets
+Shows the custom VPC with its 2 public and 2 private subnets across two Availability Zones.
+
+![VPC and Subnets](Images/Terraform-Network.png)
+
+#### EC2 Instances
+Confirms that the Proxy instances are in public subnets and the Backend (BE WS) instances are in private subnets.
+
+![VPC and Subnets](Images/Terraform-ec2.png)
+
+#### Load Balancers (LBs)
+Shows the two ALBs: one `internet-facing` (public) and one `internal` (private).
+
+![VPC and Subnets](Images/Terraform-Loadbalancers.png)
+
+#### Target Groups
+
+![VPC and Subnets](Images/Terraform-Tragetgroups.png)
+
+---
+
+### 2. Live Application Demo
+
+After the deployment, the application is accessible via the public load balancer's DNS name (provided in the `public_alb_dns` Terraform output).
+
+Here is a screenshot of the application running live in the browser:
+
+![VPC and Subnets](Images/Terraform-alb.png)
+
+Screenshot of the application running live in the browser After Reload:
+![VPC and Subnets](Images/Terraform-afterreload.png)
+
+
+
