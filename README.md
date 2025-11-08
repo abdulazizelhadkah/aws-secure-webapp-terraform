@@ -9,7 +9,7 @@ This repository contains the complete Terraform code to deploy the architecture 
 ## 🏛️ Architecture Deep Dive
 
 The infrastructure is logically and physically isolated within a custom VPC. Here is a breakdown of the components and the traffic flow:
-![AWS Architecture Diagram](Image/Diagram.png)
+![AWS Architecture Diagram](Images/Diagram.png)
 
 ### 1. Networking (VPC)
 * **VPC:** A single Virtual Private Cloud (VPC) with the CIDR block `10.0.0.0/16` serves as the foundational network, isolating all resources.
