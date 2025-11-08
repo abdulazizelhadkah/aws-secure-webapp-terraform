@@ -50,6 +50,96 @@ The infrastructure is logically and physically isolated within a custom VPC. Her
 
 ---
 
+## 📁 Project Structure
+
+This project uses a **modular Terraform structure** to ensure the code is reusable, maintainable, and well-organized. The architecture is broken down into logical components, each represented by a module in the `modules/` directory.
+
+The **root `main.tf` file** acts as the central orchestrator, responsible for instantiating these modules and "wiring" them together by passing outputs from one module (e.g., the VPC ID) as inputs to another (e.g., the subnet modules).
+
+### 🌳 File Tree Overview
+
+TERRAFORM PROJECT 
+TERRAFORM PROJECT
+├── modules/
+│   ├── alb_target/   # Manages ALB target groups and attachment
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── ec2_backend/        # Provisions the private backend EC2 instances
+│   │   ├── scripts/        # User-data scripts for backend (e.g., install app)
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── ec2_proxy/          # Provisions the public proxy EC2 instances
+│   │   ├── scripts/        # User-data scripts for proxy (e.g., install nginx)
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── igw/                # Manages the Internet Gateway
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── load_balancer/      # Provisions the Public and Internal ALBs
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── nat_gateway/        # Provisions the NAT Gateway and Elastic IP
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── Private_subnet/     # Manages the private subnets
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── public_subnet/      # Manages the public subnets
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── routing_tables/     # Manages all route tables and associations
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── security_group/     # A reusable module to create security groups
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── vpc/                # Provisions the base VPC
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   └── webapp/             # (Likely a helper module, e.g., for deployment)
+│   │   ├── app.py
+│   │   └── requirements.txt
+│
+├── .gitignore              # Specifies files for Git to ignore
+├── .terraform.lock.hcl     # Locks provider versions for consistency
+├── main.tf                 # Root module: orchestrates all other modules
+├── variables.tf            # Root variables: user-configurable inputs
+└── outputs.tf              # Root outputs: displays key info (like the ALB URL)
+
+### 🧩 Module Responsibilities
+
+#### 🌍 Networking Foundation
+* **`vpc`**: Defines the foundational network boundary (`10.0.0.0/16`). Its outputs (like `vpc_id`) are used by almost every other module.
+* **`public_subnet` & `Private_subnet`**: These modules are called twice (once for each AZ) to create the four subnets. They depend on the `vpc` module.
+* **`igw`**: Creates the Internet Gateway to allow inbound/outbound internet traffic for the public subnets.
+* **`nat_gateway`**: Creates the NAT Gateway (in a public subnet) to allow *outbound-only* internet access for the private subnets (e.g., for software updates).
+* **`routing_tables`**: The "traffic controller." This module creates the public and private route tables and associates them with the correct subnets. This is what officially makes a subnet "public" (a route to the IGW) or "private" (a route to the NAT Gateway).
+
+#### 🔐 Security
+* **`security_group`**: A highly reusable module. This module is called *multiple times* from the root `main.tf` to create the different firewalls for each tier:
+    1.  **Public ALB SG:** Allows web traffic (80/443) from the internet.
+    2.  **Proxy SG:** Allows traffic *only* from the Public ALB.
+    3.  **Internal ALB SG:** Allows traffic *only* from the Proxy instances.
+    4.  **Backend SG:** Allows traffic *only* from the Internal ALB.
+
+#### 💻 Compute & Load Balancing
+* **`load_balancer`**: Provisions *both* the internet-facing (public) ALB and the internal ALB.
+* **`ec2_proxy`**: Deploys the reverse proxy instances into the public subnets.
+* **`ec2_backend`**: Deploys the core application (BE WS) instances into the private subnets, making them inaccessible from the internet.
+* **`alb_target`**: The glue that connects compute to the load balancers. This module is used to create target groups and register the EC2 instances from `ec2_proxy` and `ec2_backend` with their respective ALBs.
+---
+
 ## 🚀 Getting Started
 
 ### Prerequisites
