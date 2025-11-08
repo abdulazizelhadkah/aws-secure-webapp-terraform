@@ -57,66 +57,65 @@ This project uses a **modular Terraform structure** to ensure the code is reusab
 The **root `main.tf` file** acts as the central orchestrator, responsible for instantiating these modules and "wiring" them together by passing outputs from one module (e.g., the VPC ID) as inputs to another (e.g., the subnet modules).
 
 ### 🌳 File Tree Overview
-
-TERRAFORM PROJECT 
+```
 TERRAFORM PROJECT
 ├── modules/
-│   ├── alb_target/   # Manages ALB target groups and attachment
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── ec2_backend/        # Provisions the private backend EC2 instances
-│   │   ├── scripts/        # User-data scripts for backend (e.g., install app)
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── ec2_proxy/          # Provisions the public proxy EC2 instances
-│   │   ├── scripts/        # User-data scripts for proxy (e.g., install nginx)
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── igw/                # Manages the Internet Gateway
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── load_balancer/      # Provisions the Public and Internal ALBs
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── nat_gateway/        # Provisions the NAT Gateway and Elastic IP
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── Private_subnet/     # Manages the private subnets
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── public_subnet/      # Manages the public subnets
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── routing_tables/     # Manages all route tables and associations
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── security_group/     # A reusable module to create security groups
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   ├── vpc/                # Provisions the base VPC
-│   │   ├── main.tf
-│   │   ├── outputs.tf
-│   │   └── variable.tf
-│   └── webapp/             # (Likely a helper module, e.g., for deployment)
-│   │   ├── app.py
-│   │   └── requirements.txt
+│   ├── alb_target/   # Manages ALB target groups and attachment
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── ec2_backend/        # Provisions the private backend EC2 instances
+│   │   ├── scripts/        # User-data scripts for backend (e.g., install app)
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── ec2_proxy/          # Provisions the public proxy EC2 instances
+│   │   ├── scripts/        # User-data scripts for proxy (e.g., install nginx)
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── igw/      _         # Manages the Internet Gateway
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── load_balancer/      # Provisions the Public and Internal ALBs
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── nat_gateway/        # Provisions the NAT Gateway and Elastic IP
+│  _  │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── Private_subnet/     # Manages the private subnets
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── public_subnet/      # Manages the public subnets
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── routing_tables/     # Manages all route tables and associations
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── security_group/     # A reusable module to create security groups
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   ├── vpc/                # Provisions the base VPC
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   └── variable.tf
+│   └── webapp/             # (Likely a helper module, e.g., for deployment)
+│   │   ├── app.py
+│   └── └── requirements.txt
 │
-├── .gitignore              # Specifies files for Git to ignore
-├── .terraform.lock.hcl     # Locks provider versions for consistency
-├── main.tf                 # Root module: orchestrates all other modules
-├── variables.tf            # Root variables: user-configurable inputs
-└── outputs.tf              # Root outputs: displays key info (like the ALB URL)
-
+├── .gitignore              # Specifies files for Git to ignore
+├── .terraform.lock.hclMusic    # Locks provider versions for consistency
+├── main.tf                 # Root module: orchestrates all other modules
+├── variables.tf            # Root variables: user-configurable inputs
+└── outputs.tf              # Root outputs: displays key info (like the ALB URL)
+```
 ### 🧩 Module Responsibilities
 
 #### 🌍 Networking Foundation
