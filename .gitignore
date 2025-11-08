@@ -2,8 +2,7 @@
 
 The primary state file
 
-*.backup
-
+*.tfstate.backup
 Local crash logs
 
 crash.log
