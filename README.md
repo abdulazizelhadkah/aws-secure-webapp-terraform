@@ -94,3 +94,5 @@ To avoid ongoing charges, you can destroy all the resources created by this proj
 
 ```sh
 terraform destroy
+```
+Type yes when prompted to approve the deletion.
