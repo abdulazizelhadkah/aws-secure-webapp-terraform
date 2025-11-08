@@ -2,8 +2,7 @@
 
 The primary state file
 
-*.tfstate
-*.tfstate.backup
+*.backup
 
 Local crash logs
 
@@ -25,8 +24,3 @@ Credentials/Secrets (IMPORTANT)
 id_rsa
 credentials
 secrets.tfvars
-
-terraform.tfstate.1762248441.backup 
-terraform.tfstate.1762248869.backup
-terraform.tfstate.1762419660.backup
-terraform.tfstate.1762421234.backup
